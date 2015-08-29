@@ -128,7 +128,7 @@ class CapitalHumano(models.Model):
     ]
     SIT_GESTACION_TYPE=[('semana%i' % i,'Semana %i'%i) for i in range(1,41)]
     entrevista = models.ForeignKey('Entrevista')
-    persona = models.ForeignKey('Persona')
+    persona = models.ForeignKey('Persona', related_name='capitales_humanos')
     trabajo = models.CharField(max_length=50)
     embarazo = models.CharField(max_length=50, choices=SIT_GESTACION_TYPE, null=True,blank=True)
     pap = models.BooleanField(help_text="Realizado en los ultimos 2 años")
@@ -137,3 +137,6 @@ class CapitalHumano(models.Model):
 
     def __srt__(self):
         return "Capital Humano aasociado a la entrevista: %s" % self.entrevista
+
+
+    

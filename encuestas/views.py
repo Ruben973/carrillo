@@ -1,6 +1,6 @@
 from django.shortcuts import render, render_to_response, get_object_or_404
-from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm
-from .models import CapitalSocial
+from .forms import PersonaModelForm, CapitalSocialModelForm, CapitalFisicoModelForm,GrupoFamiliarModelForm,CapitalHumanoModelForm
+from .models import CapitalSocial,CapitalHumano,Persona
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
 from django.template import RequestContext
@@ -45,6 +45,10 @@ def Social(request, id_capitalsocial=None):
     return render(request,'formulario.html',{'form':form, 'nombre': nombre})
     
 
+
+
+
+
 def inicio(request):
     return render(request, 'site_base.html', {})
 
@@ -69,5 +73,20 @@ def Grupo_Familiar(request):
             return render(request,'exito.html', {})
 
     return render(request,'formulario.html',{'form': form, 'nombre': nombre})
+
+def mujeres_con_pap(request):
+    nombre = 'Porcentaje de mujeres con PAP'
+    mujeres_con_pap = Persona.objects.filter(grupo_familiar__entrevista__relevamiento__id=1, sexo='f', capitales_humanos__pap=True)
+    mujeres_con_pap=len(mujeres_con_pap)
+    mujeres_total=Persona.objects.filter(grupo_familiar__entrevista__relevamiento__id=1, sexo='f')
+    mujeres_total=len(mujeres_total)
+    total=(mujeres_con_pap/mujeres_total)*100                                    
+##    if request.method=="POST":
+##        form=CapitalHumanoModelForm(request.POST)
+##        if form.is_valid():
+##            form.save()
+##            return render(request,'exito.html', {})
+    return render(request,'pap.html',{'nombre': nombre, 'total': total})
+    
 
 
